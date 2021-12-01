@@ -1,0 +1,34 @@
+# AoC 2021 solutions.
+
+> [AoC](https://adventofcode.com/2021) website.
+
+My solutions for the AoC 2021.<br />
+Each day have his data.txt (also example.txt), there is an input-result list in the [FAQ](#faq) in case you want to compair the results but you don't want to read the solution.
+
+## Table of Contents
+
+- [Usage](#Usage)
+- [FAQ](#faq)
+- [License](#license)
+
+---
+
+## Usage
+
+- Read the source.
+
+---
+
+## FAQ
+- **Results [data.txt into each day directory]**
+    ```<language>
+    https://adventofcode.com/2020/day/1
+    Your puzzle answer was 1400.
+    Your puzzle answer was 1429.
+    ```
+   
+---
+
+## License
+[![License: MIT](https://img.shields.io/badge/License-MIT-lightgreen)](https://raw.githubusercontent.com/TikoTako/TikoTako/main/Licenze/MIT)<br/>
+Copyright 2021 © TikoTako
