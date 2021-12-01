@@ -1,68 +1,69 @@
+#include <vector>
+#include <string>
 #include <fstream>
 #include <iostream>
-#include <sstream>
-#include <vector>
 
 using namespace std;
 
-int PartOne(ifstream* dataFile)
+int PartOne(std::vector <int>* data)
 {
-	std::string line;
-	int prec, corr, tot = 0;
-	std::getline(*dataFile, line);
-	prec = std::stoi(line);
-	while (std::getline(*dataFile, line))
+	int prec = (*data)[0],
+		corr = 0,
+		tot = 0;
+
+	for (size_t i = 1; i < data->size(); i++)
 	{
-		corr = std::stoi(line);
-		if (corr > prec)
-			tot++;
+		corr = (*data)[i];
+		tot += corr > prec ? 1 : 0;
 		prec = corr;
 	}
-	std::cout << "PART ONE\r\nThere are " << tot << " measurements larger than the previous.\r\n";
 	return tot;
 }
 
-int PartTwo(ifstream* dataFile)
+int PartTwo(std::vector <int>* data)
 {
-	int tot = 0;
-	std::string line;
-	vector <int> data;
-	dataFile->clear(); // eof flag durr
-	dataFile->seekg(0, ios::beg);
-	while (std::getline(*dataFile, line))
+	int prec = (*data)[0] + (*data)[1] + (*data)[2],
+		curr = 0,
+		tot = 0;
+	for (size_t i = 1; i < data->size() - 2; i++)
 	{
-		data.insert(data.end(), std::stoi(line));
-	}
-	int prec, curr;
-	prec = data[0] + data[1] + data[2];
-	cout << prec << endl;
-	for (size_t i = 1; i < data.size() -2; i++)
-	{
-		curr = data[i] + data[i+1] + data[i+2];
-		if (curr > prec)
-			tot++;
+		curr = (*data)[i] + (*data)[i + 1] + (*data)[i + 2];
+		tot += curr > prec ? 1 : 0;
 		prec = curr;
 	}
-	std::cout << "PART TWO\r\nThere are " << tot << " measurements larger than the previous.\r\n";
 	return tot;
+}
+
+std::vector <int> LoadData(std::string fileName)
+{
+	std::vector <int> data{};
+	std::ifstream dataFile(fileName);
+	if (dataFile.is_open())
+	{
+		std::string line;
+		while (std::getline(dataFile, line))
+		{
+			data.insert(data.end(), std::stoi(line));
+		}
+		dataFile.close();
+	}
+	return data;
 }
 
 int main()
 {
-	bool useExampleData = false;
-	std::ifstream dataFile(useExampleData ? "example.txt" : "data.txt");
-	std::cout << (useExampleData ? "Example d" : "D") << "ata file open [" << (dataFile.is_open() ? "ok" : "fail") << "]\r\n";
+	std::string fileName = /*"example.txt";*/ "data.txt";
+	std::vector <int> data = LoadData(fileName);
 
-	if (dataFile.is_open())
+	if (!data.empty())
 	{
-		int r;
-		r = PartOne(&dataFile);
-		if (useExampleData)
-			std::cout << "Test [" << (r == 7 ? "PASSED" : "FAILED") << "]\r\n";
-		r = PartTwo(&dataFile);
-		if (useExampleData)
-			std::cout << "Test [" << (r == 5 ? "PASSED" : "FAILED") << "]\r\n";
-		dataFile.close();
+		std::cout << "Data file loaded [" << fileName << "]" << std::endl
+			<< "Part one: " << PartOne(&data) << std::endl
+			<< "Part two: " << PartTwo(&data) << std::endl;
+	}
+	else
+	{
+		std::cout << "Can't load data file." << std::endl;
 	}
 	cin.get();
 }
