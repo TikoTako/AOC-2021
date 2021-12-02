@@ -91,12 +91,14 @@ std::vector<DataStruct> LoadData(std::string fileName)
 					break;
 			}
 		}
+		dataFile.close();
 	}
 	return  r;
 }
 
 int main()
 {
+	std::cout << "AOC 2021 - Day 2" << std::endl << std::endl;
 	std::string fileName = /*"example.txt"*/ "data.txt";
 	std::vector<DataStruct> data = LoadData(fileName);
 	if (data.size() > 0)
