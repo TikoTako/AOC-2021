@@ -22,11 +22,20 @@ Each day have his data.txt (also example.txt), there is an input-result list in 
 ## FAQ
 - **Results [data.txt into each day directory]**
     ```<language>
-    https://adventofcode.com/2020/day/1
-    Your puzzle answer was 1400.
-    Your puzzle answer was 1429.
+    https://adventofcode.com/2021/day/1
+    Your puzzle answer was 1400
+    Your puzzle answer was 1429
     ```
-   
+    ```<language>
+    https://adventofcode.com/2021/day/2
+    Your puzzle answer was 1714950
+    Your puzzle answer was 1281977850
+    ```
+    ```<language>
+    https://adventofcode.com/2021/day/3
+    Your puzzle answer was 
+    Your puzzle answer was 
+    ```
 ---
 
 ## License
