@@ -14,10 +14,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="data.txt">
+    <Text Include="example.txt">
       <Filter>Data</Filter>
     </Text>
-    <Text Include="example.txt">
+    <Text Include="data.txt">
       <Filter>Data</Filter>
     </Text>
   </ItemGroup>
