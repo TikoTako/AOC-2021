@@ -34,6 +34,11 @@ Each day have his data.txt (also example.txt), there is an input-result list in 
     ```<language>
     https://adventofcode.com/2021/day/3
     Your puzzle answer was 3847100
+    Your puzzle answer was 4105235
+    ```
+```<language>
+    https://adventofcode.com/2021/day/4
+    Your puzzle answer was 
     Your puzzle answer was 
     ```
 ---
