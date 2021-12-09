@@ -12,22 +12,33 @@ private:
 
 	int c = 0;
 	int* pointer = nullptr;
-	std::tuple <int, int, int*> R1;
-	std::tuple <int, int, int*> R2;
-	std::tuple <int, int, int*> R3;
-	std::tuple <int, int, int*> R4;
-	std::tuple <int, int, int*> R5;
+	std::tuple <int, int*> R1;
+	std::tuple <int, int*> R2;
+	std::tuple <int, int*> R3;
+	std::tuple <int, int*> R4;
+	std::tuple <int, int*> R5;
+	bool izWin = false;
+
+	LeBoard()
+	{
+		pointer = (int*)malloc(5 * 5 * 4);
+		R1 = std::make_tuple(0, pointer);
+		R2 = std::make_tuple(0, pointer + 5);
+		R3 = std::make_tuple(0, pointer + 5 * 2);
+		R4 = std::make_tuple(0, pointer + 5 * 3);
+		R5 = std::make_tuple(0, pointer + 5 * 4);
+	}
 
 public:
 
-	LeBoard(int* n)
+	int* GetThis()
 	{
-		pointer = (int*)malloc(5 * 5 * 4);
-		R1 = std::make_tuple(0, 0, pointer);
-		R2 = std::make_tuple(0, 0, pointer + 5);
-		R3 = std::make_tuple(0, 0, pointer + 5 * 2);
-		R4 = std::make_tuple(0, 0, pointer + 5 * 3);
-		R5 = std::make_tuple(0, 0, pointer + 5 * 4);
+		return pointer;
+	}
+
+	LeBoard(int* n) : LeBoard()
+	{
+		//LeBoard();
 		memcpy(pointer, n, 5 * 5 * 4);
 	}
 
@@ -42,7 +53,7 @@ public:
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				std::cout << std::get<2>(R)[i] << " ";
+				std::cout << std::get<1>(R)[i] << " ";
 			}
 			std::cout << std::endl;
 		}
@@ -51,22 +62,25 @@ public:
 	int SumRemaining()
 	{
 		int r = 0;
-		for (auto& R2 : { &R1, &R2, &R3, &R4, &R5 })
+		for (auto& R : { &R1, &R2, &R3, &R4, &R5 })
 			for (int i = 0; i < 5; i++)
-				r += (std::get<2>(*R2)[i] > -1 ? std::get<2>(*R2)[i] : 0);
+				r += (std::get<1>(*R)[i] > -1 ? std::get<1>(*R)[i] : 0);
+		izWin = true;
 		return r;
 	}
 
 	int CheckWinner(int n)
 	{
+		if (izWin)
+			return -1;
 		// rows
 		for (auto& R : { &R1, &R2, &R3, &R4, &R5 })
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				if (std::get<2>(*R)[i] == n)
+				if (std::get<1>(*R)[i] == n)
 				{
-					std::get<2>(*R)[i] = -1; // overwrite derp
+					std::get<1>(*R)[i] = -1; // overwrite derp
 					std::get<0>(*R)++;
 					if (std::get<0>(*R) == 5)
 						return SumRemaining();
@@ -80,7 +94,7 @@ public:
 			int colSums = 0;
 			for (auto& R : { &R1, &R2, &R3, &R4, &R5 })
 			{
-				if (std::get<2>(*R)[col] == -1)
+				if (std::get<1>(*R)[col] == -1)
 				{
 					colSums++;
 				}
@@ -98,25 +112,48 @@ struct LeBingo
 	std::vector <unsigned int> Draws;
 	std::vector <LeBoard*> Boards;
 
-	void GetTheWinner()
+private:
+	void GetTheWinner(bool isLastinner)
 	{
+		int lastOne = 0, lastDraw = 0, lastWin = 0;
 		auto totBoards = (*this).Boards.size();
+
 		if (totBoards > 0)
 		{
+			/* make a copy cuz potato code change n to -1*/
+			std::vector <LeBoard*> tmpBoards;
+			for (auto b : (*this).Boards)
+			{
+				tmpBoards.push_back(new LeBoard(b->GetThis()));
+			}
+
 			for (int draw : (*this).Draws)
 			{
 				for (int i = 0; i < totBoards; i++)
 				{
-					int iHazWin = (*this).Boards[i]->CheckWinner(draw);
+					int iHazWin = tmpBoards[i]->CheckWinner(draw);
 					//std::cout << (iHazWin > 0 ? (std::string("winner [").append(std::to_string(i + 1)).append("]")) : "losinner") << std::endl;
 					if (iHazWin > 0)
 					{
-						std::cout << "winner [" << i + 1 << "] " << iHazWin << " * " << draw << " = " << iHazWin * draw << std::endl;
-						(*this).Boards[i]->prnt();
-						return;
+						if (!isLastinner)
+						{
+							std::cout << "winner [" << i + 1 << "] " << iHazWin << " * " << draw << " = " << iHazWin * draw << std::endl;
+							tmpBoards[i]->prnt();
+							(*this).Boards[i]->prnt();
+							return;
+						}
+						else
+						{
+							lastOne = i;
+							lastDraw = draw;
+							lastWin = iHazWin;
+						}
 					}
 				}
 			}
+			std::cout << "last winner [" << lastOne + 1 << "] " << lastWin << " * " << lastDraw << " = " << lastWin * lastDraw << std::endl;
+			tmpBoards[lastOne]->prnt();
+			(*this).Boards[lastOne]->prnt();
 		}
 		else
 		{
@@ -124,9 +161,19 @@ struct LeBingo
 		}
 	}
 
+public:
+	void GetTheWinner()
+	{
+		GetTheWinner(false);
+	}
+
+	void GetTheLastinner()
+	{
+		GetTheWinner(true);
+	}
+
 	void PrintDraws()
 	{
-		// todo draws > 0 ?
 		std::cout << "Draws:" << std::endl;
 		for (int draw : (*this).Draws)
 		{
@@ -154,15 +201,6 @@ struct LeBingo
 
 LeBingo LoadData(std::string leFileName)
 {
-	// draws line 0 comma separated
-	// crlf
-	// board(1) 5* -> space(one or zero)n space(one or two)/crlf last one
-	// board(1) 5* -> space(one or zero)n space(one or two)/crlf last one
-	// board(1) 5* -> space(one or zero)n space(one or two)/crlf last one
-	// board(1) 5* -> space(one or zero)n space(one or two)/crlf last one
-	// board(1) 5* -> space(one or zero)n space(one or two)/crlf last one
-	// crlf
-	//  other board, etc...
 	LeBingo leBingo;
 	std::ifstream leDataFile(leFileName);
 	if (leDataFile.is_open())
@@ -212,6 +250,7 @@ LeBingo LoadData(std::string leFileName)
 		leBingo.PrintDraws();
 		//leBingo.PrintBoards();
 		leBingo.GetTheWinner();
+		leBingo.GetTheLastinner();
 		std::cout << leBingo.Boards.size() << std::endl;
 	}
 	else
@@ -224,6 +263,6 @@ LeBingo LoadData(std::string leFileName)
 
 int main()
 {
-	// LoadData("data.txt");
-	LoadData("example.txt");
+	//LoadData("example.txt");
+	LoadData("data.txt");
 }
