@@ -50,8 +50,13 @@ Each day have his data.txt (also example.txt), there is an input-result list in 
     https://adventofcode.com/2021/day/6
     Your puzzle answer was 371379
     Your puzzle answer was 1674303997472
+    ```    
+    ```<language>
+    https://adventofcode.com/2021/day/7
+    Your puzzle answer was 
+    Your puzzle answer was 
     ```
-    
+
 ---
 
 ## License
