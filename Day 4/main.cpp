@@ -5,7 +5,6 @@
 #include <sstream>
 #include <iostream>
 
-
 struct LeBoard
 {
 private:
