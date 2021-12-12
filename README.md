@@ -53,8 +53,7 @@ Each day have his data.txt (also example.txt), there is an input-result list in 
     ```    
     ```<language>
     https://adventofcode.com/2021/day/7
-    Your puzzle answer was 
-    Your puzzle answer was 
+    Yep i'm stuck here
     ```
 
 ---
